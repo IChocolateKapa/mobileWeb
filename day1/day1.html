@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Echo的第一个移动Web页面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/hammer.min.js"></script>
+    <script src="../js/change.js"></script>
+    <style>
+        /*不定宽高的元素水平垂直居中*/
+        .parent{
+            justify-content: center;/*子元素水平居中*/
+            align-items: center;/*子元素垂直居中*/
+            display: flex;
+            display: -webkit-flex;
+        }
+
+        /*css控制元素多行文本溢出*/
+        .element{
+            display: -webkit-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+        }
+        html{
+            /*font-size: 256px;*/
+        }
+        body{
+            margin: 0;
+            padding: 0;
+            background: red;
+        }
+        #pinchzoom{.
+            overflow: hidden;
+            width: 100%;
+            height: auto;
+            margin: 0;
+            background-color: #eeeeee;
+        }
+        p{
+            font-size: .2rem;
+            padding: .1rem;
+        }
+
+    </style>
+</head>
+    <div id="pinchzoom">
+        <img src="04.jpg" alt="" ondragstart="return false" style="width: 100%; height: auto" border="0"/>
+        <p>
+            习近平抵达伦敦开始访英 现场 国宴菜单女王亲定
+            中英将签300亿英镑大单 赴英留学名额或增加 国平 专题
+            李克强出席双创周活动 打破议程即席讲话
+            多地书记省长曾建议中纪委别曝光当地违纪情况
+            人口学者：2020年后将爆发招工难娶妻难和养老难
+            国考报名单日增长超10万人 千余岗位仍无人问津
+            内地游客在香港拒绝高价购物被围殴身亡(图)
+            马航失联者未按期还贷被诉腾房 法院驳回
+            河南村民抗战纪念期间多次赴京上访 4名官员受处
+            菲律宾发声明反对“中国南沙灯塔开始发光”
+            秸秆燃烧被禁16年依然在烧 农民称清运成本太高
+            扬州国土局处长接受异性有偿陪侍被调查(图)
+            调查：东莞新一轮企业倒闭潮该怪谁？
+            湖南3名中小学生入室抢劫打死1名女教师
+            狗嘴下救女童被指是谎言 已收到70多万捐款(图)
+        </p>
+    </div>
+<body>
+
+<script>
+    var hammerTime = Hammer(document.getElementById("pinchzoom"), {
+        transform_always_block: true,
+        transform_min_scale: 0.5,
+        drag_block_horizontal: true,
+        drag_block_vertical: true,
+        drag_min_distance: 0
+    });
+
+    var img = document.getElementById("img");
+
+    var posX = 0,
+        posY = 0,
+        scale = 1,
+        last_scale,
+        rotation = 1,
+        last_rotation;
+
+    hammerTime.on("touch drag transform", function(e){
+        switch(e.type){
+            case 'touch':
+                last_scale = scale;
+                last_rotation = rotation;
+                last_posX = posX;
+                last_posY = posY;
+                break;
+            case 'drag':
+                posX = last_posX + e.gesture.deltaX;
+                posY = last_posY + e.gesture.deltaY;
+                break;
+            case 'transform':
+                rotation = last_rotation + e.gesture.rotation;
+                scale = Math.min(last_scale * e.gesture.scale, 10);
+                break;
+        }
+        /*图片变形处理*/
+        var transform = "translate3d(" + posX + "px," + posY + "px, 0)" +
+                "scale3d(" + scale + "," + scale + ", 0)" +
+                "rotate(" + rotation + "deg)";
+        img.style.webkitTransform = transform;
+    });
+
+
+
+</script>
+
+</body>
+</html>
